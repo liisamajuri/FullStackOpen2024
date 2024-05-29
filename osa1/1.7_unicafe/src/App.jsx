@@ -17,6 +17,7 @@ const App = () => {
 
   const goodClick = () => {
     setValues(feedbackValues.concat(1))
+    console.log(feedbackValues)
     const updatedGood = good + 1
     setGood(updatedGood)
     setTotal(updatedGood + neutral + bad)
@@ -24,6 +25,7 @@ const App = () => {
 
   const neutralClick = () => {
     setValues(feedbackValues.concat(0))
+    console.log(feedbackValues)
     const updatedNeutral = neutral + 1
     setNeutral(updatedNeutral)
     setTotal(good + updatedNeutral + bad)
@@ -31,12 +33,14 @@ const App = () => {
 
   const badClick = () => {
     setValues(feedbackValues.concat(-1))
+    console.log(feedbackValues)
     const updatedBad = bad + 1
     setBad(updatedBad)
     setTotal(good + neutral + updatedBad)
   }
 
-  const getAverage = ({array, total}) => {
+  const getAverage = ({ array, total }) => {
+    if (total === 0) return 0
     let sum = 0;
     for (let i = 0; i < array.length; i++) {
       sum += array[i];
@@ -52,12 +56,13 @@ const App = () => {
         <Button handleClick={neutralClick} text='neutral' />
         <Button handleClick={badClick} text='bad' />
       </div>
-      <h1>Give feedback:</h1>
+      <h1>Statistics:</h1>
       <Display counter={good} text='good' />
       <Display counter={neutral} text='neutral' />
       <Display counter={bad} text='bad' />
       <Display counter={total} text='all' />
-      <Display counter={getAverage(feedbackValues, total)} text='average' />
+      <Display counter={getAverage({ array: feedbackValues, total })} text='average' />
+      <Display counter={total === 0 ? 0 : (good / total) * 100} text='positive (%)' />
     </div>
   )
 }
