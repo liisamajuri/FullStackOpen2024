@@ -6,6 +6,12 @@ const Button = ({ handleClick, text }) => (
   </button>
 )
 
+const getRandomInt = (min, max) => {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+}
+
 
 const App = () => {
   const anecdotes = [
@@ -19,31 +25,24 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
   
-  const getAnecdote = () => {
-    setValues(feedbackValues.concat(1))
-    console.log(feedbackValues)
-    const updatedGood = good + 1
-    setGood(updatedGood)
-    setTotal(updatedGood + neutral + bad)
-  }
-
   const [selected, setSelected] = useState(0)
+
+  const getAnecdote = () => {
+    const updatedSelected = getRandomInt(0, anecdotes.length)
+    setSelected(updatedSelected)
+    console.log(updatedSelected)
+  }
+  
 
   return (
     <div>
       <h1>Anecdote:<br/></h1>
+        <div>
+      {anecdotes[selected]}
+      </div>    
       <div>
-        <Button handleClick={getAnecdote} text='good' />
+        <Button handleClick={getAnecdote} text='next anecdote' />
       </div>
-      <h1>Statistics:</h1>
-      <Statistics
-        good={good}
-        neutral={neutral}
-        bad={bad}
-        total={total}
-        average={average}
-        positive={positive}
-      />
     </div>
   )
 }
