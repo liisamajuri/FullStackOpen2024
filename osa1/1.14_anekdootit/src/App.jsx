@@ -12,6 +12,18 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
 }
 
+const getIndexOfMax = (arr) => { 
+  let maxIndex = 0; 
+  for (let i = 1; i < arr.length; i++) { 
+      if (arr[i] > arr[maxIndex]) { 
+          maxIndex = i; 
+      } 
+  }
+  console.log(arr)
+  console.log(maxIndex) 
+  return maxIndex; 
+} 
+
 
 const App = () => {
   const anecdotes = [
@@ -44,9 +56,11 @@ const App = () => {
     console.log(`Updated: ${votesCopy}`)
   }
 
+  const greatestIndex = getIndexOfMax(votes)
+
   return (
     <div>
-      <h1>Anecdote:<br/></h1>
+      <h1>Anecdote of the day:<br/></h1>
       <div>
         <p>{anecdotes[selected]}</p>
         <p>votes: {votes[selected]}</p>
@@ -55,6 +69,12 @@ const App = () => {
         <Button handleClick={getVote} text='vote' />
         <Button handleClick={getAnecdote} text='next anecdote' />
       </div>
+      <h1>Anecdote with most votes:<br/></h1>
+      <div>
+        <p>{anecdotes[greatestIndex]}</p>
+        <p>votes: {votes[greatestIndex]}</p>
+      </div>  
+
     </div>
   )
 }
