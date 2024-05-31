@@ -35,17 +35,20 @@ const App = () => {
   }
 
   const getVote = () => {
-    const updatedVoting = selected + 1
-    setVotes(updatedVoting)
-    console.log(updatedVoting)
-    
+    const votedItem = selected
+    const votesCopy = [...votes]
+    console.log(`Voted index: ${votedItem}`)
+
+    votesCopy[votedItem] += 1
+    setVotes(votesCopy)
+    console.log(`Updated: ${votesCopy}`)
   }
 
   return (
     <div>
       <h1>Anecdote:<br/></h1>
-        <div>
-      {anecdotes[selected]}
+      <div>
+        {anecdotes[selected]}
       </div>    
       <div>
         <Button handleClick={getVote} text='vote' />
