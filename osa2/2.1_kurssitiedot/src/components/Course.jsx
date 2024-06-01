@@ -1,41 +1,34 @@
-const Course = ({ course }) => {
-  const parts = course.parts
-  const courseName = course.name
-  
-  const Header = ({ courseName }) => {
-    console.log(courseName)
-    return (
-      <div>
-        <h1>
-          {courseName}
-        </h1>
-      </div>
-    )
-  }
+const Header = ({ courseName }) => {
+  console.log(courseName)
+  return (
+    <h1>{courseName}</h1>
+  )
+}
 
-  const Part = ({ part }) => {
-    return (
-      <li>{part.name} {part.exercises}</li>
-    )
-  }
-  
-  const Content = ({ parts }) => {
-    console.log(parts)
+const Part = ({ part }) => {
+  console.log(part)
+  return (
+    <p>{part.name} {part.exercises}</p>
+  )
+}
 
-    return (
-      <div>
-        <ul>
-          {parts.map(part => 
-            <Part key={part.id} part={part} />
-          )}
-        </ul>
-      </div>
-    )
-  }
+const Content = ({ parts }) => {
+  console.log(parts)
+
   return (
     <div>
-      <Header course={courseName = courseName} />
-      <Content parts={parts = parts} />
+      {parts.map(part => 
+        <Part key={part.id} part={part} />
+      )}
+    </div>
+  )
+}
+
+  const Course = ({ course }) => {
+  return (
+    <div>
+      <Header courseName = {course.name} />
+      <Content parts={course.parts} />
     </div>
   )
 
