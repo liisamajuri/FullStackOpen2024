@@ -83,7 +83,7 @@ useEffect(hook, [])
       setNewNote('')
     })
     */
-}
+  }
 
   const handleNoteChange = (event) => {
     console.log(event.target.value)
