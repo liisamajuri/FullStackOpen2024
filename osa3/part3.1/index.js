@@ -21,7 +21,6 @@ let notes = [
   }
 ]
 
-
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
@@ -32,11 +31,9 @@ const requestLogger = (request, response, next) => {
 
 app.use(requestLogger)
 
-
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
-
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
@@ -57,7 +54,7 @@ app.get('/api/notes/:id', (request, response) => {
   console.log(note)
   */
 
-    if (note) {
+  if (note) {
     response.json(note)
   } else {
     response.status(404).end()
