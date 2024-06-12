@@ -53,10 +53,6 @@ const App = () => {
 
   }
 
-  const handleNoteChange = (event) => {
-    console.log(event.target.value)
-    setNewNote(event.target.value)
-  }
 
   const toggleImportanceOf = id => {
     const note = notes.find(n => n.id === id)
@@ -76,9 +72,14 @@ const App = () => {
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
-        setNotes(notes.filter(n => n.id !== id))
       })
   }
+
+  const handleNoteChange = (event) => {
+    console.log(event.target.value)
+    setNewNote(event.target.value)
+  }
+
   
   const notesToShow = showAll
     ? notes
