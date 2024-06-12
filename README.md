@@ -7,3 +7,10 @@
 Kurssilla tutustutaan JavaScriptilla tapahtuvaan moderniin websovelluskehitykseen. Kurssilla käsitellään myös sovellusten testaamista, konfigurointia ja suoritusympäristöjen hallintaa sekä tietokantojen käyttöä sovelluksen tietojen tallettamiseen.
 
 Kurssin laajuus on 5-14 opintopistettä, sisältö on sama kun Helsingin yliopiston tietojenkäsittelytieteen osaston keväällä 2022 pidetyllä kurssilla Full stack -websovelluskehitys. Kurssiin liittyy myös 1-10 opintopisteen laajuinen harjoitustyö.
+
+
+## Huomioita tehtävistä
+
+### _**db.json**_
+
+Tehtävissä, joissa on käytetty JSON Serveriä ja *db.json*-tiedostoa, em. tiedosto on siirretty tehtävän valmistumisen jälkeen ko. harjoitustehtävän hakemistoon. Tehtävän koodin suorittamiseksi *db.json*-tiedosto tulee siirtää projektin juurikansioon (tai korvata sillä hetkellä juurikansiossa oleva samanniminen tiedosto).
