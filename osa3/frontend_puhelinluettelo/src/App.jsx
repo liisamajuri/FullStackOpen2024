@@ -81,11 +81,19 @@ const App = () => {
           setPersons(persons.concat(returnedPersons))
           setNewName('')
           setNewNumber('')
+          setInfoMessage(`${newName} added!`)
+          setTimeout(() => {
+            setInfoMessage(null)
+          }, 5000)          
         })
-        setInfoMessage(`${newName} added!`)
-        setTimeout(() => {
-          setInfoMessage(null)
-        }, 5000)
+        .catch(error => {
+          console.log(error)
+          setErrorMessage(`Name or number is missing. Please check your input.`            )
+          setTimeout(() => {setErrorMessage(null)}, 5000)
+          setNewName('')
+          setNewNumber('')          
+        })  
+
     }
   }
 
