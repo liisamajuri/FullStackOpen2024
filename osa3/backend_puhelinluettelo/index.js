@@ -43,40 +43,63 @@ let persons = [
 ]
 */  
 
+
 app.get('/', (request, response) => {
   response.send('<h1>Puhelinluettelo</h1>')
 })
 
 app.get('/info', (request, response) => {
-  const count = persons.length
-  const text = `Phonebook has info for ${count} people`
-  const date = new Date().toString()
-  response.send(
-    `<p>${text}<br><br>${date}</p>`
-  )
+  Person.find({}).then(persons => {
+    const count = persons.length
+    const text = `Phonebook has info for ${count} people`
+    const date = new Date().toString()
+    response.send(
+      `<p>${text}<br><br>${date}</p>`
+    )
+  })
 })
 
+const getAll = () => {
+  Person
+    .find({})
+    .then(result => {
+      console.log("Phonebook:")
+      result.forEach(person => {
+        console.log(person.name, person.number)
+      })
+    })
+    .catch(err => {
+      console.error(err)
+    })
+}
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
     response.json(persons)
   })
+  getAll()
 })
+
+
 
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   console.log(id)
   // const person = persons.find(person => person.id === id)
   Person.findById(id).then(person => {
-    response.json(person)
+    if (person) {
+      response.json(person)
+    } else {
+      response.status(404).end()
+    }
   })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(person => person.id !== id)
-
-  response.status(204).end()
+  Person.findByIdAndRemove(request.params.id)
+    .then(response => {
+      response.status(204).end()
+    })
 })
 
 const getRandomInt = (max) => {
@@ -96,16 +119,10 @@ const generateId = () => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  console.log(body)
+  //console.log(body)
 
-  const nameList = persons.map(n => n.name);
-  console.log(nameList)
-
-  if (nameList.includes(body.name)) {
-    return response.status(400).json({ 
-      error: 'Name must be unique' 
-    })    
-  }
+  // const nameList = persons.map(n => n.name);
+  //console.log(nameList)
 
   if (!body.name) {
     return response.status(400).json({ 
@@ -119,17 +136,25 @@ app.post('/api/persons', (request, response) => {
     })
   }  
 
-  
-  const person = new Person({
-    name: body.name,
-    number: body.number
-  })
+  Person.find({}).then(persons => {
+    const nameList = persons.map(n => n.name)
 
+    if (nameList.includes(body.name)) {
+      return response.status(400).json({
+        error: 'Name must be unique'
+      })
+    } else {
+      const person = new Person({
+        name: body.name,
+        number: body.number,
+      })
+      person.save().then(savedPerson => {
+        console.log(`Added ${savedPerson.name} number ${savedPerson.number} to phonebook!`)
+        response.json(savedPerson)
+      })      
+    }
+  })
   // persons = persons.concat(person)
-
-  person.save().then(savedPerson => {
-    response.json(savedPerson)
-  })
 })
 
 const PORT = process.env.PORT

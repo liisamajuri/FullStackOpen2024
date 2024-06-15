@@ -1,6 +1,6 @@
 # FullStackOpen2024
 
-## Osan 3 README: Tehtävät 3.9.-3.12
+## Osan 3 README: Tehtävät 3.9.-3.14
 
 - Aiempiin tehtäviin verrattuna tehtävänantojen 3.9.-3.12. mukaiset taskit on tehty *samoihin tiedostoihin*
 - Poikkeuksena aiempiin tehtäviin em. tehtävien hakemistot on nimetty seuraavasti:
