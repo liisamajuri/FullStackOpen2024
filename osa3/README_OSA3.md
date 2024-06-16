@@ -1,8 +1,8 @@
 # FullStackOpen2024
 
-## Osan 3 README: Tehtävät 3.9.-3.14
+## Osan 3 README: Tehtävät 3.9.-3.18
 
-- Aiempiin tehtäviin verrattuna tehtävänantojen 3.9.-3.12. mukaiset taskit on tehty *samoihin tiedostoihin*
+- Aiempiin tehtäviin verrattuna tehtävänantojen 3.9.-3.18. mukaiset taskit on tehty *samoihin tiedostoihin*
 - Poikkeuksena aiempiin tehtäviin em. tehtävien hakemistot on nimetty seuraavasti:
   - _**backend_puhelinluettelo**_
   - _**frontend_puhelinluettelo**_
