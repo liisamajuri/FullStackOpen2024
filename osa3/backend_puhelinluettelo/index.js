@@ -78,12 +78,13 @@ const printAll = () => {
   Person
     .find({})
     .then(result => {
-      console.log("Phonebook:")
+      console.log("\nPhonebook:")
       result.forEach(person => {
         console.log(person.name, person.number)
       })
     })
     .catch(error => next(error))
+    console.log("\n")
 }
 
 app.get('/api/persons', (request, response) => {
@@ -126,25 +127,46 @@ app.post('/api/persons', (request, response) => {
   }  
 
   Person.find({}).then(persons => {
+    /*
     const nameList = persons.map(n => n.name)
-
+    
     if (nameList.includes(body.name)) {
       return response.status(400).json({
         error: 'Name must be unique'
       })
     } else {
-      const person = new Person({
-        name: body.name,
-        number: body.number,
-      })
-      person.save().then(savedPerson => {
-        console.log(`Added ${savedPerson.name} number ${savedPerson.number} to phonebook!`)
-        response.json(savedPerson)
-      })      
-    }
+    */
+    const person = new Person({
+      name: body.name,
+      number: body.number,
+    })
+
+    person.save().then(savedPerson => {
+      console.log(`Added ${savedPerson.name} number ${savedPerson.number} to phonebook!`)
+      response.json(savedPerson)
+    })      
   })
-  // persons = persons.concat(person)
 })
+  // persons = persons.concat(person)
+
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+  console.log(body)
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
+
+
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
