@@ -98,10 +98,10 @@ app.get('/api/persons', (request, response) => {
 
 
 app.get('/api/persons/:id', (request, response, next) => {
-  const id = Number(request.params.id)
-  console.log(id)
+  //const id = Number(request.params.id)
+  console.log(request.params.id)
   // const person = persons.find(person => person.id === id)
-  Person.findById(id).then(person => {
+  Person.findById(request.params.id).then(person => {
     if (person) {
       response.json(person)
     } else {
