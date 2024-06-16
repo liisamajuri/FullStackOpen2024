@@ -18,6 +18,21 @@ morgan.token('body', (req) => {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
 /*
 let persons = [
   {
@@ -59,7 +74,7 @@ app.get('/info', (request, response) => {
   })
 })
 
-const getAll = () => {
+const printAll = () => {
   Person
     .find({})
     .then(result => {
@@ -68,21 +83,20 @@ const getAll = () => {
         console.log(person.name, person.number)
       })
     })
-    .catch(err => {
-      console.error(err)
-    })
+    .catch(error => next(error))
 }
 
 app.get('/api/persons', (request, response) => {
-  Person.find({}).then(persons => {
+  Person.find({})
+  .then(persons => {
     response.json(persons)
   })
-  getAll()
+  .catch(error => next(error))
+  printAll();
 })
 
 
-
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const id = Number(request.params.id)
   console.log(id)
   // const person = persons.find(person => person.id === id)
@@ -93,36 +107,11 @@ app.get('/api/persons/:id', (request, response) => {
       response.status(404).end()
     }
   })
+  .catch(error => next(error))
 })
-
-app.delete('/api/persons/:id', (request, response) => {
-  Person.findByIdAndRemove(request.params.id)
-    .then(response => {
-      response.status(204).end()
-    })
-})
-
-const getRandomInt = (max) => {
-  return Math.floor(Math.random() * max);
-}
-
-const generateId = () => {
-  const randomId = getRandomInt(1000);
-  const idArray = persons.map(n => n.id);
-  
-  if (idArray.includes(randomId)) {
-    return generateId();
-  } else {
-    return randomId;
-  }
-}
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  //console.log(body)
-
-  // const nameList = persons.map(n => n.name);
-  //console.log(nameList)
 
   if (!body.name) {
     return response.status(400).json({ 
@@ -156,6 +145,37 @@ app.post('/api/persons', (request, response) => {
   })
   // persons = persons.concat(person)
 })
+
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndDelete(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
+  })
+
+/*
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max);
+}
+
+const generateId = () => {
+  const randomId = getRandomInt(1000);
+  const idArray = persons.map(n => n.id);
+  
+  if (idArray.includes(randomId)) {
+    return generateId();
+  } else {
+    return randomId;
+  }
+}
+*/
+
+// olemattomien osoitteiden käsittely
+app.use(unknownEndpoint)
+
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
