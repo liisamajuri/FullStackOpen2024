@@ -40,25 +40,25 @@ let persons = [
   {
     "id": 1,
     "name": "Arto Hellas",
-    "number": "040-123456"    
+    "number": "040-123456"
   },
   {
     "id": 2,
     "name": "Ada Lovelace",
-    "number": "39-44-5323523"    
+    "number": "39-44-5323523"
   },
   {
     "id": 3,
     "name": "Dan Abramov",
-    "number": "12-43-234345"    
+    "number": "12-43-234345"
   },
   {
     "id": 4,
     "name": "Mary Poppendieck",
-    "number": "39-23-6423122" 
+    "number": "39-23-6423122"
   }
 ]
-*/  
+*/
 
 
 app.get('/', (request, response) => {
@@ -80,22 +80,21 @@ const printAll = () => {
   Person
     .find({})
     .then(result => {
-      console.log("\nPhonebook:")
+      console.log('\nPhonebook:')
       result.forEach(person => {
         console.log(person.name, person.number)
       })
     })
-    .catch(error => next(error))
-    console.log("\n")
+  console.log('\n')
 }
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
   Person.find({})
-  .then(persons => {
-    response.json(persons)
-  })
-  .catch(error => next(error))
-  printAll();
+    .then(persons => {
+      response.json(persons)
+    })
+    .catch(error => next(error))
+  printAll()
 })
 
 
@@ -110,48 +109,48 @@ app.get('/api/persons/:id', (request, response, next) => {
       response.status(404).end()
     }
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
   /*
   if (!body.name) {
-    return response.status(400).json({ 
-      error: 'Name missing' 
+    return response.status(400).json({
+      error: 'Name missing'
     })
   }
 
   if (!body.number) {
-    return response.status(400).json({ 
-      error: 'Number missing' 
+    return response.status(400).json({
+      error: 'Number missing'
     })
   }
-  */  
- /*
+  */
+  /*
   Person.find({}).then(persons => {
-   
+
     const nameList = persons.map(n => n.name)
-    
+
     if (nameList.includes(body.name)) {
       return response.status(400).json({
         error: 'Name must be unique'
       })
     } else {
     */
-    const person = new Person({
-      name: body.name,
-      number: body.number,
-    })
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  })
 
-    person.save().then(savedPerson => {
-      console.log(`Added ${savedPerson.name} number ${savedPerson.number} to phonebook!`)
-      response.json(savedPerson)
-    })
-    .catch(error => next(error))     
+  person.save().then(savedPerson => {
+    console.log(`Added ${savedPerson.name} number ${savedPerson.number} to phonebook!`)
+    response.json(savedPerson)
+  })
+    .catch(error => next(error))
   //})
 })
-  // persons = persons.concat(person)
+// persons = persons.concat(person)
 
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -177,10 +176,11 @@ app.put('/api/persons/:id', (request, response, next) => {
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
     .then(result => {
+      console.log(result)
       response.status(204).end()
     })
     .catch(error => next(error))
-  })
+})
 
 /*
 const getRandomInt = (max) => {
@@ -190,7 +190,7 @@ const getRandomInt = (max) => {
 const generateId = () => {
   const randomId = getRandomInt(1000);
   const idArray = persons.map(n => n.id);
-  
+
   if (idArray.includes(randomId)) {
     return generateId();
   } else {

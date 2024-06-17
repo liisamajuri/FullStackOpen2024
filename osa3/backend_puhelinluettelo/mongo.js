@@ -23,7 +23,7 @@ const Person = mongoose.model('Person', personSchema)
 const personName = process.argv[3]
 const personNumber = process.argv[4]
 
-const createPerson = () =>{
+const createPerson = () => {
   const person = new Person({
     name: personName,
     number: personNumber,
@@ -33,20 +33,20 @@ const createPerson = () =>{
 
 const savePerson = (person) => {
   person.save()
-  .then(() => {
-    console.log(`Added ${person.name} number ${person.number} to phonebook!`)
-    mongoose.connection.close()
-  })
-  .catch(err => {
-    console.error(err)
-  })
+    .then(() => {
+      console.log(`Added ${person.name} number ${person.number} to phonebook!`)
+      mongoose.connection.close()
+    })
+    .catch(err => {
+      console.error(err)
+    })
 }
 
 const getAll = () => {
   Person
     .find({})
     .then(result => {
-      console.log("Phonebook:")
+      console.log('Phonebook:')
       result.forEach(person => {
         console.log(person.name, person.number)
       })
