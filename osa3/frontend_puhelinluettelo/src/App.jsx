@@ -87,28 +87,39 @@ const App = () => {
           }, 5000)          
         })
         .catch(error => {
-          const errMsg = error.response.data
-          console.log(errMsg)
-          if (error.response.data.error && error.response.data.error.message) {
-            if (error.response.data.error.message.includes('name')) {
-              if (error.response.data.error.message.includes('minlength')) {
+          console.log(error)
+          const errData = String(error.response.data.error)
+          console.log(errData)
+      
+          if (errData) {
+            if (errData.includes('name')) {
+              if (errData.includes('minimum allowed length')) {
                 setErrorMessage('Name is too short. Minimum length is 3 characters.')
-              } else {
+              } else if (errData.includes('`name` is required')){
                 setErrorMessage('Name is missing. Please provide a name.')
+              } else {
+                setErrorMessage(`${errData}`)
               }
-            } else if (error.response.data.error.message.includes('number')) {
-              setErrorMessage('Number is missing. Please provide a number.')
-            } else {!
-              setErrorMessage(`${errMsg}`)
-            }
+            } else if (errData.includes('number')) {
+              if (errData.includes('minimum allowed length')) {
+                setErrorMessage('Number is too short. Minimum length is 8 characters.')
+              } else if (errData.includes('`number` is required')){
+                setErrorMessage('Number is missing. Please provide a name.')
+              } else if (errData.includes('not a valid phone number')) {
+                setErrorMessage(`${newNumber} is not a valid phone number. Right format is 'XX-XXXXXX' or 'XXX-XXXXX'.`)                
+              } else {
+                setErrorMessage(`${errData}`)
+              }
+            } else {
+              setErrorMessage(`${errData}`)
+            }              
           } else {
-            setErrorMessage(`${errMsg}`)
+            setErrorMessage(`${errData}`)
           }
           setTimeout(() => {setErrorMessage(null)}, 5000)
           setNewName('')
           setNewNumber('')          
         })  
-
     }
   }
 
