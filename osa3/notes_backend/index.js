@@ -56,8 +56,8 @@ app.put('/api/notes/:id', (request, response, next) => {
   }
   */
   Note.findByIdAndUpdate(
-    request.params.id, 
-    { content, important }, 
+    request.params.id,
+    { content, important },
     { new: true, runValidators: true, context: 'query' }
   )
     .then(updatedNote => {
@@ -83,14 +83,14 @@ const generateId = () => {
     : 0
   return maxId + 1
 }
-*/  
+*/
 
 app.post('/api/notes', (request, response) => {
   const body = request.body
 
   if (!body.content) {
-    return response.status(400).json({ 
-      error: 'content missing' 
+    return response.status(400).json({
+      error: 'content missing'
     })
   }
 
@@ -102,7 +102,7 @@ app.post('/api/notes', (request, response) => {
   note.save().then(savedNote => {
     response.json(savedNote)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
