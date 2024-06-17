@@ -87,8 +87,11 @@ const App = () => {
           }, 5000)          
         })
         .catch(error => {
-          console.log(error)
-          setErrorMessage(`Name or number is missing. Please check your input.`            )
+          const msg = error.response.data
+          console.log(msg)
+          console.log(`${errorMessage}`)
+          setErrorMessage(`${msg}`)
+          console.log(`${errorMessage}`)
           setTimeout(() => {setErrorMessage(null)}, 5000)
           setNewName('')
           setNewNumber('')          
@@ -128,7 +131,7 @@ const App = () => {
         })
         .catch(error => {
           console.log(error)
-          setErrorMessage(`${personToDelete.name} has already been deleted from server`            )
+          setErrorMessage(`${personToDelete.name} has already been deleted from server`)
           setTimeout(() => {setErrorMessage(null)}, 5000)
           setPersons(persons.filter(person => person.id !== personToDelete.id))
         })            
