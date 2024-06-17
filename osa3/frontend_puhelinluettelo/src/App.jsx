@@ -87,11 +87,23 @@ const App = () => {
           }, 5000)          
         })
         .catch(error => {
-          const msg = error.response.data
-          console.log(msg)
-          console.log(`${errorMessage}`)
-          setErrorMessage(`${msg}`)
-          console.log(`${errorMessage}`)
+          const errMsg = error.response.data
+          console.log(errMsg)
+          if (error.response.data.error && error.response.data.error.message) {
+            if (error.response.data.error.message.includes('name')) {
+              if (error.response.data.error.message.includes('minlength')) {
+                setErrorMessage('Name is too short. Minimum length is 3 characters.')
+              } else {
+                setErrorMessage('Name is missing. Please provide a name.')
+              }
+            } else if (error.response.data.error.message.includes('number')) {
+              setErrorMessage('Number is missing. Please provide a number.')
+            } else {!
+              setErrorMessage(`${errMsg}`)
+            }
+          } else {
+            setErrorMessage(`${errMsg}`)
+          }
           setTimeout(() => {setErrorMessage(null)}, 5000)
           setNewName('')
           setNewNumber('')          
