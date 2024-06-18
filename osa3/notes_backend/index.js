@@ -86,7 +86,7 @@ const generateId = () => {
 }
 */
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
   const body = request.body
 
   if (!body.content) {
@@ -103,7 +103,6 @@ app.post('/api/notes', (request, response) => {
   note.save().then(savedNote => {
     response.json(savedNote)
   })
-    // eslint-disable-next-line no-undef
     .catch(error => next(error))
 })
 
