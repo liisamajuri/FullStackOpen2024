@@ -56,6 +56,26 @@ describe('addition of a new blog', () => {
     const contents = blogsAtEnd.map(n => n.title)
     assert(contents.includes('The Black Cat'))
   })
+  test('succeeds without likes', async () => {
+    const newBlog = {
+      _id: "abcdefg12345676234d17fa",
+      title: "The Raven",
+      author: "Edgar Allan Poe",
+      url: "https://en.wikipedia.org/wiki/Edgar_Allan_Poe",
+      __v: 0
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    const addedBlog = blogsAtEnd.find(blog => blog.title === 'The Raven')
+    assert.strictEqual(addedBlog.likes, 0)
+  })
 })
 
 after(async () => {
