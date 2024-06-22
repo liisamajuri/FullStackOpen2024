@@ -30,8 +30,34 @@ describe('checking the correct format of the data', () => {
       assert.strictEqual(blog._id, undefined)
     })
   })
+})
 
-  after(async () => {
-    await mongoose.connection.close()
+
+describe('addition of a new blog', () => {
+  test('succeeds with valid data', async () => {
+    const newBlog = {
+      _id: "5a422b8912345676234d17fa",
+      title: "The Black Cat",
+      author: "Edgar Allan Poe",
+      url: "https://en.wikipedia.org/wiki/Edgar_Allan_Poe",
+      likes: 25,
+      __v: 0
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+
+    const contents = blogsAtEnd.map(n => n.title)
+    assert(contents.includes('The Black Cat'))
   })
+})
+
+after(async () => {
+  await mongoose.connection.close()
 })
