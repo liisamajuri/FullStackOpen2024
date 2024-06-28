@@ -1,6 +1,10 @@
 import Blog from './Blog'
 
 const FilteredBlogs = ({ blogs, user }) => {
+  if (!user) {
+    return null
+  }
+  
   const userBlogs = blogs.filter(blog => blog.user.name === user.name)
 
   return (

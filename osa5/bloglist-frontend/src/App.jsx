@@ -52,6 +52,15 @@ const App = () => {
 
   const addBlog = async (event) => {
     event.preventDefault()
+    if (!newTitle || !newAuthor || !newUrl) {
+      console.log('Something is missing')
+      setErrorMessage('All fields are required!')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      return
+    }
+
     const blogObject = {
       title: newTitle,
       author: newAuthor,
@@ -59,15 +68,18 @@ const App = () => {
     }
 
     try {
+      console.log(blogObject)
       const returnedBlog = await blogService.create(blogObject)
+      console.log(returnedBlog)
       setBlogs(blogs.concat(returnedBlog))
       setInfoMessage(`A new blog ${newTitle} added from ${newAuthor}!`)
+      setNewTitle('')
+      setNewAuthor('')
+      setNewUrl('')            
       setTimeout(() => {
         setInfoMessage(null)
       }, 5000)
-      setNewTitle('')
-      setNewAuthor('')
-      setNewUrl('')
+
     } catch (exception) {
       setErrorMessage('Error adding blog')
       setTimeout(() => {
@@ -154,9 +166,10 @@ const App = () => {
   )
 
   const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <h3>Add a new blog</h3>
+    <div>
+      <h3>Create a new blog:</h3>
       <BlogAddForm
+        addBlog={addBlog}
         newTitle={newTitle}
         handleTitleChange={handleTitleChange}
         newAuthor={newAuthor}
@@ -165,7 +178,7 @@ const App = () => {
         handleUrlChange={handleUrlChange}
       />
       <FilteredBlogs blogs={blogs} user={user} />
-    </form>
+    </div>
   )
 
   return (
