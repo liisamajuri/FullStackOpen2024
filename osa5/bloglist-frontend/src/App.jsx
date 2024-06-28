@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import FilteredBlogs from './components/FilteredBlogs'
 import BlogAddForm from './components/BlogAddForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -153,9 +153,7 @@ const App = () => {
         newUrl={newUrl}
         handleUrlChange={handleUrlChange}
       />
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+      <FilteredBlogs blogs={blogs} user={user} />
     </form>
   )
 
@@ -167,7 +165,7 @@ const App = () => {
 
       {!user && loginForm()}
       {user && <div>
-        <p>{user.name} logged in</p>
+        <p>{user.name} ({user.username}) logged in</p>
         {blogForm()}
       </div>
       }
