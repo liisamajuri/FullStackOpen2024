@@ -15,11 +15,12 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
+  const fetchBlogs = async () => {
+    const blogs = await blogService.getAll()
+    setBlogs(blogs)
+  }
+
   useEffect(() => {
-    const fetchBlogs = async () => {
-      const blogs = await blogService.getAll()
-      setBlogs(blogs)
-    }
     fetchBlogs()
   }, [])
 
@@ -68,14 +69,13 @@ const App = () => {
     }
 
     try {
-      console.log(blogObject)
       const returnedBlog = await blogService.create(blogObject)
-      console.log(returnedBlog)
       setBlogs(blogs.concat(returnedBlog))
       setInfoMessage(`A new blog ${newTitle} added from ${newAuthor}!`)
       setNewTitle('')
       setNewAuthor('')
-      setNewUrl('')            
+      setNewUrl('')
+      fetchBlogs()            
       setTimeout(() => {
         setInfoMessage(null)
       }, 5000)
