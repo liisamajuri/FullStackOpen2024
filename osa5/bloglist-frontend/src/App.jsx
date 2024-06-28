@@ -44,7 +44,7 @@ const App = () => {
     }
 
     return (
-      <div className={type}>
+      <div className={type === 'error' ? 'error' : 'info'}>
         {message}
       </div>
     )
@@ -61,7 +61,7 @@ const App = () => {
     try {
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
-      setInfoMessage(`A New Blog Added!`)
+      setInfoMessage(`A new blog ${newTitle} added from ${newAuthor}!`)
       setTimeout(() => {
         setInfoMessage(null)
       }, 5000)
@@ -110,18 +110,29 @@ const App = () => {
         setInfoMessage(null)
       }, 5000)
     } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setUsername('')
+      setPassword('')
+      setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
     }
   }
 
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedBlogappUser')
+    setUser(null)
+    setInfoMessage(`${user.name} logged out!`)
+    setTimeout(() => {
+      setInfoMessage(null)
+    }, 5000)
+  }
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <h2>Log in to application</h2>
       <div>
-        username
+        Username: 
         <input
           type="text"
           value={username}
@@ -130,7 +141,7 @@ const App = () => {
         />
       </div>
       <div>
-        password
+        Password: 
         <input
           type="password"
           value={password}
@@ -138,7 +149,7 @@ const App = () => {
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button type="submit">Login</button>
     </form>
   )
 
@@ -166,6 +177,7 @@ const App = () => {
       {!user && loginForm()}
       {user && <div>
         <p>{user.name} ({user.username}) logged in</p>
+        <button onClick={handleLogout}>Logout</button>
         {blogForm()}
       </div>
       }
