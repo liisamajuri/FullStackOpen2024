@@ -10,17 +10,17 @@ const App = () => {
   const [notes, setNotes] = useState(null)
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [loginVisible, setLoginVisible] = useState(false)
   const noteFormRef = useRef()
 
- 
+
   useEffect(() => {
     noteService
       .getAll()
-        .then(initialNotes => {
+      .then(initialNotes => {
         setNotes(initialNotes)
       })
   }, [])
@@ -36,17 +36,17 @@ const App = () => {
 
 
   // do not render anything if notes is still null
-  if (!notes) { 
-    return null 
+  if (!notes) {
+    return null
   }
 
   console.log('render', notes.length, 'notes')
-  
+
   const Notification = ({ message }) => {
     if (message === null) {
       return null
     }
-  
+
     return (
       <div className="error">
         {message}
@@ -67,10 +67,10 @@ const App = () => {
   const toggleImportanceOf = id => {
     const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important }
-  
+
     noteService
       .update(id, changedNote)
-        .then(returnedNote => {
+      .then(returnedNote => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
 
@@ -90,7 +90,7 @@ const App = () => {
     setNewNote(event.target.value)
   }
 
-  
+
   const notesToShow = showAll
     ? notes
     : notes.filter(note => note.important === true)
@@ -102,7 +102,7 @@ const App = () => {
       fontStyle: 'italic',
       fontSize: 16
     }
-  
+
     return (
       <div style={footerStyle}>
         <br />
@@ -122,7 +122,7 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
-      ) 
+      )
 
       noteService.setToken(user.token)
       setUser(user)
@@ -136,7 +136,7 @@ const App = () => {
     }
 
   }
-  
+
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? 'none' : '' }
     const showWhenVisible = { display: loginVisible ? '' : 'none' }
@@ -170,14 +170,14 @@ const App = () => {
 
       {!user && loginForm()}
       {user && <div>
-      <p>{user.name} logged in</p>
-      <Togglable buttonLabel='new note' ref={noteFormRef}>
-        <NoteForm createNote={addNote} />
-      </Togglable>
+        <p>{user.name} logged in</p>
+        <Togglable buttonLabel='new note' ref={noteFormRef}>
+          <NoteForm createNote={addNote} />
+        </Togglable>
       </div>
-    } 
+      }
 
-    <h2>Notes</h2>
+      <h2>Notes</h2>
 
       <div>
         <button onClick={() => setShowAll(!showAll)}>
@@ -186,19 +186,19 @@ const App = () => {
       </div>
 
       <ul>
-        {notesToShow.map(note => 
-          <Note 
-            key={note.id} 
-            note={note} 
+        {notesToShow.map(note =>
+          <Note
+            key={note.id}
+            note={note}
             toggleImportance={() => toggleImportanceOf(note.id)}
           />
         )}
       </ul>
 
-      <Footer />   
+      <Footer />
 
     </div>
   )
 }
 
-export default App 
+export default App
