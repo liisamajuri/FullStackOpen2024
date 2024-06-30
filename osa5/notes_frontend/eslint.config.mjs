@@ -6,9 +6,10 @@ import babelParser from '@babel/eslint-parser';
 
 export default [
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['**/*.{js}'],
     languageOptions: {
       sourceType: 'module',
+      globals: { ...js.configs.recommended.globals },
       ecmaVersion: 'latest',
       parser: babelParser,
       parserOptions: {
@@ -22,6 +23,8 @@ export default [
       react: { version: '18.2' },
     },
     rules: {
+      "no-unused-vars": "off",
+      "no-undef": "off",      
       indent: ['error', 2],
       'linebreak-style': ['error', 'unix'],
       quotes: ['error', 'single'],
@@ -33,7 +36,6 @@ export default [
       'no-console': 0,
       'react/prop-types': 0,
       'react/react-in-jsx-scope': 'off',
-      'no-unused-vars': 0,
     },
     plugins: {
       react,

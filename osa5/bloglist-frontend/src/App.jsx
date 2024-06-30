@@ -1,19 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import FilteredBlogs from './components/FilteredBlogs'
 import BlogAddForm from './components/BlogAddForm'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
   const [infoMessage, setInfoMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const blogFormRef = useRef()
 
   const fetchBlogs = async () => {
     const blogs = await blogService.getAll()
@@ -51,53 +50,16 @@ const App = () => {
     )
   }
 
-  const addBlog = async (event) => {
-    event.preventDefault()
-    if (!newTitle || !newAuthor || !newUrl) {
-      console.log('Something is missing')
-      setErrorMessage('All fields are required!')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-      return
-    }
-
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl
-    }
-
+  const addBlog = async (blogObject) => {
+    
     try {
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
-      setInfoMessage(`A new blog ${newTitle} added from ${newAuthor}!`)
-      setNewTitle('')
-      setNewAuthor('')
-      setNewUrl('')
-      fetchBlogs()            
-      setTimeout(() => {
-        setInfoMessage(null)
-      }, 5000)
-
+      fetchBlogs()
     } catch (exception) {
-      setErrorMessage('Error adding blog')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      throw new Error('Error adding blog')
     }
-  }
-
-  const handleTitleChange = (event) => {
-    setNewTitle(event.target.value)
-  }
-
-  const handleAuthorChange = (event) => {
-    setNewAuthor(event.target.value)
-  }
-
-  const handleUrlChange = (event) => {
-    setNewUrl(event.target.value)
+    blogFormRef.current.toggleVisibility()
   }
 
   const handleLogin = async (event) => {
@@ -167,16 +129,9 @@ const App = () => {
 
   const blogForm = () => (
     <div>
-      <h3>Create a new blog:</h3>
-      <BlogAddForm
-        addBlog={addBlog}
-        newTitle={newTitle}
-        handleTitleChange={handleTitleChange}
-        newAuthor={newAuthor}
-        handleAuthorChange={handleAuthorChange}
-        newUrl={newUrl}
-        handleUrlChange={handleUrlChange}
-      />
+      <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
+        <BlogAddForm createBlog={addBlog} />
+      </Togglable>
       <FilteredBlogs blogs={blogs} user={user} />
     </div>
   )

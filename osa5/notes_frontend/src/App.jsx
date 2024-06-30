@@ -1,3 +1,5 @@
+/* global window, console, setTimeout */
+
 import { useState, useEffect, useRef } from 'react'
 import Note from './components/Note'
 import LoginForm from './components/LoginForm'
