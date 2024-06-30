@@ -5,16 +5,11 @@ const BlogAddForm = ({ createBlog }) => {
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
-  const [infoMessage, setInfoMessage] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
 
   const addBlog = async (event) => {
     event.preventDefault()
     if (!newTitle || !newAuthor || !newUrl) {
-      setErrorMessage('All fields are required!')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      createBlog(null, 'All fields are required!')
       return
     }
 
@@ -24,21 +19,10 @@ const BlogAddForm = ({ createBlog }) => {
       url: newUrl
     }
 
-    try {
-      await createBlog(blogObject)
-      setInfoMessage(`A new blog ${newTitle} added by ${newAuthor}!`)
-      setNewTitle('')
-      setNewAuthor('')
-      setNewUrl('')
-      setTimeout(() => {
-        setInfoMessage(null)
-      }, 5000)
-    } catch (exception) {
-      setErrorMessage('Error adding blog')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
+    createBlog(blogObject, `A new blog ${newTitle} added by ${newAuthor}!`)
+    setNewTitle('')
+    setNewAuthor('')
+    setNewUrl('')
   }
 
   const handleTitleChange = (event) => {
@@ -53,22 +37,8 @@ const BlogAddForm = ({ createBlog }) => {
     setNewUrl(event.target.value)
   }
 
-  const Notification = ({ message, type }) => {
-    if (message === null) {
-      return null
-    }
-  
-    return (
-      <div className={type === 'error' ? 'error' : 'info'}>
-        {message}
-      </div>
-    )
-  }
-
   return (
     <div>
-      <Notification message={infoMessage} type="info" />
-      <Notification message={errorMessage} type="error" />
       <form onSubmit={addBlog}>
         <div>
           Title: <input 

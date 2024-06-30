@@ -50,16 +50,30 @@ const App = () => {
     )
   }
 
-  const addBlog = async (blogObject) => {
-    
+  const addBlog = async (blogObject, message) => {
+    if (!blogObject) {
+      setErrorMessage(message)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      return
+    }
+
     try {
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
-      fetchBlogs()
+      setInfoMessage(message)
+      fetchBlogs() // Päivitetään blogilista
+      setTimeout(() => {
+        setInfoMessage(null)
+      }, 5000)
+      blogFormRef.current.toggleVisibility()
     } catch (exception) {
-      throw new Error('Error adding blog')
+      setErrorMessage('Error adding blog')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
-    blogFormRef.current.toggleVisibility()
   }
 
   const handleLogin = async (event) => {
