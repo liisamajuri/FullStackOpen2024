@@ -76,6 +76,19 @@ const App = () => {
     }
   }
 
+  const updateLikes = async (id, updatedBlog) => {
+    try {
+      const returnedBlog = await blogService.update(id, updatedBlog)
+      setBlogs(blogs.map(blog => blog.id === id ? returnedBlog : blog))
+    } catch (exception) {
+      setErrorMessage('Error updating likes')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+
   const handleLogin = async (event) => {
     event.preventDefault()
     console.log('logging in with', username, password)
@@ -146,7 +159,6 @@ const App = () => {
       <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
         <BlogAddForm createBlog={addBlog} />
       </Togglable>
-      <FilteredBlogs blogs={blogs} user={user} />
     </div>
   )
 
@@ -155,16 +167,17 @@ const App = () => {
       <h1>Blogs</h1>
       <Notification message={infoMessage} type="info" />
       <Notification message={errorMessage} type="error" />
-
       {!user && loginForm()}
-      {user && <div>
-        <p>{user.name} ({user.username}) logged in</p>
-        <button onClick={handleLogout}>Logout</button>
-        {blogForm()}
-      </div>
-      }
+      {user && (
+        <div>
+          <p>{user.name} ({user.username}) logged in</p>
+          <button onClick={handleLogout}>Logout</button>
+          {blogForm()}
+          <FilteredBlogs blogs={blogs} user={user} updateLikes={updateLikes} />
+        </div>
+      )}
     </div>
   )
-}
+}  
 
 export default App

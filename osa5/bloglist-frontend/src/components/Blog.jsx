@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateLikes }) => {
   const [visible, setVisible] = useState(false)
 
   const blogStyle = {
@@ -13,6 +14,15 @@ const Blog = ({ blog }) => {
 
   const toggleVisibility = () => {
     setVisible(!visible)
+  }
+
+  const likeBlog = async () => {
+    const updatedBlog = {
+      ...blog,
+      likes: blog.likes + 1,
+      user: blog.user.id
+    }
+    await updateLikes(blog.id, updatedBlog)
   }
 
   return (
@@ -28,13 +38,18 @@ const Blog = ({ blog }) => {
           <p>{blog.url}</p>
           <p>
             likes {blog.likes}
-            <button>like</button>
+            <button onClick={likeBlog}>like</button>
           </p>
           <p>{blog.user.name}</p>
         </div>
       )}
     </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  updateLikes: PropTypes.func.isRequired,
 }
 
 export default Blog

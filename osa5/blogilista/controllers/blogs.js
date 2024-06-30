@@ -21,15 +21,6 @@ blogsRouter.get('/:id', async (request, response) => {
   }
 })
 
-/*
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
- */ 
 
 
 blogsRouter.post('/', async (request, response) => {
@@ -80,11 +71,11 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 
 blogsRouter.put('/:id', async (request, response) => {
-  const { title, author, url, likes } = request.body
+  const { title, author, url, likes, user } = request.body
 
   const updatedBlog = await Blog.findByIdAndUpdate(
     request.params.id,
-    { title, author, url, likes },
+    { title, author, url, likes, user },
     { new: true }
   )
 

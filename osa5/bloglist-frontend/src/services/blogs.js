@@ -8,9 +8,14 @@ const setToken = newToken => {
   console.log(token)
 }
 
-const getAll = () => {
-  const request = axios.get(baseUrl) 
-  return request.then(response => response.data)
+const getAll = async () => {
+  try {
+    const response = await axios.get(baseUrl)
+    return response.data
+  } catch (error) {
+    console.error('Error fetching blogs:', error)
+    return []
+  }
 }
 
 const create = async newObject => {
@@ -18,11 +23,30 @@ const create = async newObject => {
     headers: { Authorization: token },
   }
 
-  console.log(newObject)
-
-  const response = await axios.post(baseUrl, newObject, config)
-  console.log(response.data)
-  return response.data
+  try {
+    console.log(newObject)
+    const response = await axios.post(baseUrl, newObject, config)
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error('Error creating blog:', error)
+    throw error
+  }
 }
 
-export default { getAll, create, setToken }
+const update = async (id, updatedObject) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  try {
+    const response = await axios.put(`${baseUrl}/${id}`, updatedObject, config)
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error('Error updating blog:', error)
+    throw error
+  }
+}
+
+export default { getAll, create, setToken, update }
