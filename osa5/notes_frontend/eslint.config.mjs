@@ -3,13 +3,23 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import babelParser from '@babel/eslint-parser';
+import vitestGlobals from 'eslint-plugin-vitest-globals';
 
 export default [
   {
     files: ['**/*.{js}'],
     languageOptions: {
       sourceType: 'module',
-      globals: { ...js.configs.recommended.globals },
+      globals: {
+        ...js.configs.recommended.globals,
+        ...vitestGlobals.environments.env.globals,
+        console: 'readonly',
+        window: 'readonly',
+        document: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        fetch: 'readonly'
+      },
       ecmaVersion: 'latest',
       parser: babelParser,
       parserOptions: {
@@ -41,6 +51,7 @@ export default [
       react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      'vitest-globals': vitestGlobals,
     },
   },
   js.configs.recommended,
