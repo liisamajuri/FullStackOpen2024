@@ -159,6 +159,7 @@ const App = () => {
       <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
         <BlogAddForm createBlog={addBlog} />
       </Togglable>
+      <FilteredBlogs blogs={blogs} user={user} updateLikes={updateLikes} />
     </div>
   )
 
@@ -167,17 +168,16 @@ const App = () => {
       <h1>Blogs</h1>
       <Notification message={infoMessage} type="info" />
       <Notification message={errorMessage} type="error" />
+
       {!user && loginForm()}
-      {user && (
-        <div>
-          <p>{user.name} ({user.username}) logged in</p>
-          <button onClick={handleLogout}>Logout</button>
-          {blogForm()}
-          <FilteredBlogs blogs={blogs} user={user} updateLikes={updateLikes} />
-        </div>
-      )}
+      {user && <div>
+        <p>{user.name} ({user.username}) logged in</p>
+        <button onClick={handleLogout}>Logout</button>
+        {blogForm()}
+      </div>
+      }
     </div>
   )
-}  
+} 
 
 export default App

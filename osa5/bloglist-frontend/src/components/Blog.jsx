@@ -16,13 +16,13 @@ const Blog = ({ blog, updateLikes }) => {
     setVisible(!visible)
   }
 
-  const likeBlog = async () => {
+  const handleLike = () => {
     const updatedBlog = {
       ...blog,
       likes: blog.likes + 1,
       user: blog.user.id
     }
-    await updateLikes(blog.id, updatedBlog)
+    updateLikes(blog.id, updatedBlog)
   }
 
   return (
@@ -38,7 +38,7 @@ const Blog = ({ blog, updateLikes }) => {
           <p>{blog.url}</p>
           <p>
             likes {blog.likes}
-            <button onClick={likeBlog}>like</button>
+            <button onClick={handleLike}>like</button>
           </p>
           <p>{blog.user.name}</p>
         </div>
@@ -49,7 +49,7 @@ const Blog = ({ blog, updateLikes }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  updateLikes: PropTypes.func.isRequired,
+  updateLikes: PropTypes.func.isRequired
 }
 
 export default Blog
