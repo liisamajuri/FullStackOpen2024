@@ -5,7 +5,7 @@ const FilteredBlogs = ({ blogs, user, updateLikes, deleteBlog }) => {
   if (!user) {
     return null
   }
-  
+
   const userBlogs = blogs.filter(blog => blog.user.name === user.name)
 
   return (

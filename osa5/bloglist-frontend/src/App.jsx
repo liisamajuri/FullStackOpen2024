@@ -152,7 +152,7 @@ const App = () => {
     <form onSubmit={handleLogin}>
       <h2>Log in to application</h2>
       <div>
-        Username: 
+        Username:
         <input
           type="text"
           value={username}
@@ -161,7 +161,7 @@ const App = () => {
         />
       </div>
       <div>
-        Password: 
+        Password:
         <input
           type="password"
           value={password}
@@ -197,6 +197,6 @@ const App = () => {
       }
     </div>
   )
-} 
+}
 
 export default App

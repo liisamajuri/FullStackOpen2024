@@ -38,7 +38,7 @@ const update = async (id, updatedObject) => {
   const config = {
     headers: { Authorization: token },
   }
-  
+
   console.log(updatedObject)
 
   try {
