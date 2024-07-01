@@ -95,6 +95,19 @@ const App = () => {
   }
 
 
+  const deleteBlog = async (id) => {
+    try {
+      await blogService.remove(id)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+    } catch (exception) {
+      setErrorMessage('Error deleting blog')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+
   const handleLogin = async (event) => {
     event.preventDefault()
     console.log('logging in with', username, password)
@@ -165,7 +178,7 @@ const App = () => {
       <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
         <BlogAddForm createBlog={addBlog} />
       </Togglable>
-      <FilteredBlogs blogs={blogs} user={user} updateLikes={updateLikes} />
+      <FilteredBlogs blogs={blogs} user={user} updateLikes={updateLikes} deleteBlog={deleteBlog} />
     </div>
   )
 

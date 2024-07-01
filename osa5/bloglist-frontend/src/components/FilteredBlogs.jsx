@@ -1,7 +1,7 @@
 import Blog from './Blog'
 import PropTypes from 'prop-types'
 
-const FilteredBlogs = ({ blogs, user, updateLikes }) => {
+const FilteredBlogs = ({ blogs, user, updateLikes, deleteBlog }) => {
   if (!user) {
     return null
   }
@@ -12,7 +12,9 @@ const FilteredBlogs = ({ blogs, user, updateLikes }) => {
     <div>
       <h3>Your Blogs</h3>
       {userBlogs.length > 0 ? (
-        userBlogs.map(blog => <Blog key={blog.id} blog={blog} updateLikes={updateLikes} />)
+        userBlogs.map(blog => (
+          <Blog key={blog.id} blog={blog} updateLikes={updateLikes} user={user} deleteBlog={deleteBlog} />
+        ))
       ) : (
         <div>No blogs found</div>
       )}
@@ -24,6 +26,7 @@ FilteredBlogs.propTypes = {
   blogs: PropTypes.array.isRequired,
   user: PropTypes.object.isRequired,
   updateLikes: PropTypes.func.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
 }
 
 export default FilteredBlogs

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import blogService from '../services/blogs'
 
-const Blog = ({ blog, updateLikes }) => {
+const Blog = ({ blog, updateLikes, user, deleteBlog }) => {
+
   const [visible, setVisible] = useState(false)
 
   const blogStyle = {
@@ -12,9 +14,11 @@ const Blog = ({ blog, updateLikes }) => {
     marginBottom: 5
   }
 
+
   const toggleVisibility = () => {
     setVisible(!visible)
   }
+
 
   const handleLike = () => {
     const updatedBlog = {
@@ -23,6 +27,13 @@ const Blog = ({ blog, updateLikes }) => {
       user: blog.user.id
     }
     updateLikes(blog.id, updatedBlog)
+  }
+
+
+  const handleDelete = () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      deleteBlog(blog.id)
+    }
   }
 
   return (
@@ -41,6 +52,9 @@ const Blog = ({ blog, updateLikes }) => {
             <button onClick={handleLike}>like</button>
           </p>
           <p>{blog.user.name}</p>
+          {user.username === blog.user.username && (
+            <button onClick={handleDelete}>remove</button>
+          )}
         </div>
       )}
     </div>
@@ -49,7 +63,9 @@ const Blog = ({ blog, updateLikes }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  updateLikes: PropTypes.func.isRequired
+  updateLikes: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  deleteBlog: PropTypes.func.isRequired
 }
 
 export default Blog
