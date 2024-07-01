@@ -14,14 +14,18 @@ const App = () => {
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
 
+
   const fetchBlogs = async () => {
     const blogs = await blogService.getAll()
+    blogs.sort((a, b) => b.likes - a.likes)
     setBlogs(blogs)
   }
+
 
   useEffect(() => {
     fetchBlogs()
   }, [])
+
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -63,7 +67,7 @@ const App = () => {
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
       setInfoMessage(message)
-      fetchBlogs() // Päivitetään blogilista
+      fetchBlogs()
       setTimeout(() => {
         setInfoMessage(null)
       }, 5000)
@@ -79,7 +83,9 @@ const App = () => {
   const updateLikes = async (id, updatedBlog) => {
     try {
       const returnedBlog = await blogService.update(id, updatedBlog)
-      setBlogs(blogs.map(blog => blog.id === id ? returnedBlog : blog))
+      const updatedBlogs = blogs.map(blog => blog.id === id ? returnedBlog : blog)
+      updatedBlogs.sort((a, b) => b.likes - a.likes)
+      setBlogs(updatedBlogs)
     } catch (exception) {
       setErrorMessage('Error updating likes')
       setTimeout(() => {
