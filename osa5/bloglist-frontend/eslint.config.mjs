@@ -3,6 +3,8 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import babelParser from '@babel/eslint-parser';
+import vitestGlobals from 'eslint-plugin-vitest-globals';
+
 
 export default [
   {
@@ -49,6 +51,7 @@ export default [
       react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      'vitest-globals': vitestGlobals,
     },
   },
   js.configs.recommended,
