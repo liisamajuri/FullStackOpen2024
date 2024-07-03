@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
-import { describe, it, expect } from 'vitest'
+
 
 describe('Blog component', () => {
-  it('renders title and author, but not url or likes by default', () => {
+  test('renders title and author, but not url or likes by default', () => {
     const blog = {
       title: 'testTitle',
       author: 'testAuthor',
@@ -37,7 +37,7 @@ describe('Blog component', () => {
     expect(likesElement).toBeNull()
   })
 
-  it('renders url, likes, and user name when the view button is clicked', async () => {
+  test('renders url, likes, and user name when the view button is clicked', async () => {
     const blog = {
       title: 'testTitle',
       author: 'testAuthor',
@@ -76,5 +76,41 @@ describe('Blog component', () => {
     expect(urlElement).toBeDefined()
     expect(likesElement).toBeDefined()
     expect(userNameElement).toBeDefined()
+  })
+
+  test('calls the like handler twice when the like button is clicked twice', async () => {
+    const blog = {
+      title: 'testTitle',
+      author: 'testAuthor',
+      url: 'testUrl',
+      likes: 5,
+      user: { username: 'testUser', name: 'Test User' },
+    }
+
+    const user = { username: 'testUser' }
+    const mockUpdateLikes = vi.fn()
+
+    render(
+      <Blog
+        blog={blog}
+        user={user}
+        updateLikes={mockUpdateLikes}
+        deleteBlog={() => {}}
+      />
+    )
+
+    const userEventInstance = userEvent.setup()
+
+    // Click the view button to show the like button
+    const viewButton = screen.getByText('view')
+    await userEventInstance.click(viewButton)
+
+    // Click the like button twice
+    const likeButton = screen.getByText('like')
+    await userEventInstance.click(likeButton)
+    await userEventInstance.click(likeButton)
+
+    // Ensure the like handler is called twice
+    expect(mockUpdateLikes).toHaveBeenCalledTimes(2)
   })
 })
