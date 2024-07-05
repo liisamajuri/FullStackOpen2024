@@ -108,7 +108,7 @@ const App = () => {
     return (
       <div style={footerStyle}>
         <br />
-        <em>Note app, Department of Computer Science, University of Helsinki 2023</em>
+        <em>Note app, Department of Computer Science, University of Helsinki 2024</em>
       </div>
     )
   }
@@ -178,8 +178,6 @@ const App = () => {
         </Togglable>
       </div>
       }
-
-      <h2>Notes</h2>
 
       <div>
         <button onClick={() => setShowAll(!showAll)}>
