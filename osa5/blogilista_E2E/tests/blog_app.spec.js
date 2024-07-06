@@ -1,5 +1,5 @@
 const { test, describe, expect, beforeEach } = require('@playwright/test')
-const { loginWith, createBlog } = require('./helper')
+const { loginWith, createBlog, likeBlog } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -48,8 +48,22 @@ describe('Blog app', () => {
       await createBlog(page, testblog, true)
       await expect(page.getByText('No blogs found')).not.toBeVisible()
       await expect(page.getByText('Test Title Test Authorview')).toBeVisible()
-
     })
+  
+    test('a blog can be liked', async ({ page }) => {
+      const testblog = {
+        title: 'Test Title',
+        author: 'Test Author',
+        url: 'http://testurl.com',
+        likes: 0
+      }
+      await createBlog(page, testblog, true)
+      await likeBlog(page, testblog, true)
+      await expect(page.getByText('view')).not.toBeVisible()
+      await expect(page.getByText('hide')).toBeVisible()
+      await expect(page.getByText('likes 1')).toBeVisible()
+    })
+
   })
 
 
