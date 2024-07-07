@@ -17,12 +17,15 @@ const createBlog = async (page, blog) => {
   const notification = page.getByText(`A new blog ${blog.title} added by ${blog.author}!`)
   await expect(notification).toBeVisible()
   await notification.waitFor({ state: 'hidden', timeout: 10000 })
+
+  const blogEntry = page.getByText(`${blog.title} ${blog.author}`);
+  await expect(blogEntry).toBeVisible();
 }
 
-const likeBlog = async (page, blog) => {
-  await page.getByRole('button', { name: 'view' }).click()
-  await page.getByRole('button', { name: 'like' }).click()
-  await page.getByText(`likes ${blog.likes + 1}`).waitFor()
+const likeBlog = async (page, blogTitle) => {
+  const blog = page.locator(`text=${blogTitle}`).locator('..') 
+  await blog.locator('button', { hasText: 'view' }).click()
+  await blog.locator('button', { hasText: 'like' }).click()
 } 
 
 const deleteBlog = async (page, blog) => {
@@ -39,4 +42,10 @@ const deleteBlog = async (page, blog) => {
   await page.getByText(`${blog.title} ${blog.author}hide`).waitFor({ state: 'hidden', timeout: 10000 });
 };
 
-export { loginWith, createBlog, likeBlog, deleteBlog }
+const checkDeleteButtonVisible = async (page) => {
+  await page.getByRole('button', { name: 'view' }).click();
+  await expect(page.getByRole('button', { name: 'remove' })).toBeVisible();
+};
+
+
+export { loginWith, createBlog, likeBlog, deleteBlog, checkDeleteButtonVisible };

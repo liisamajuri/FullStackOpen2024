@@ -59,7 +59,7 @@ const App = () => {
       setErrorMessage(message)
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
+      }, 2000)
       return
     }
 
@@ -70,13 +70,13 @@ const App = () => {
       fetchBlogs()
       setTimeout(() => {
         setInfoMessage(null)
-      }, 5000)
+      }, 2000)
       blogFormRef.current.toggleVisibility()
     } catch (exception) {
       setErrorMessage('Error adding blog')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
+      }, 2000)
     }
   }
 
@@ -90,7 +90,7 @@ const App = () => {
       setErrorMessage('Error updating likes')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
+      }, 2000)
     }
   }
 
@@ -103,7 +103,7 @@ const App = () => {
       setErrorMessage('Error deleting blog')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
+      }, 2000)
     }
   }
 
@@ -128,14 +128,14 @@ const App = () => {
       setInfoMessage(`${user.name} logged in!`)
       setTimeout(() => {
         setInfoMessage(null)
-      }, 5000)
+      }, 2000)
     } catch (exception) {
       setUsername('')
       setPassword('')
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
+      }, 2000)
     }
   }
 
@@ -145,7 +145,7 @@ const App = () => {
     setInfoMessage(`${user.name} logged out!`)
     setTimeout(() => {
       setInfoMessage(null)
-    }, 5000)
+    }, 2000)
   }
 
   const loginForm = () => (
