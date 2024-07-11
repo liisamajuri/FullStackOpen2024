@@ -12,7 +12,7 @@ const AnecdoteList = () => {
           anecdote.content.toLowerCase().includes(filter.toLowerCase())
         )
         
-    return filteredAnecdotes.sort((a, b) => b.votes - a.votes)
+    return filteredAnecdotes.slice().sort((a, b) => b.votes - a.votes)
   })
 
   const vote = (id) => {
