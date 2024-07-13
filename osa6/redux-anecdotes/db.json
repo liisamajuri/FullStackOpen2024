@@ -33,16 +33,21 @@
     {
       "id": "b9ad",
       "content": "This is test anecdote",
-      "votes": 1
+      "votes": 2
     },
     {
       "id": "a6e1",
       "content": "This is another test anecdote",
-      "votes": 0
+      "votes": 1
     },
     {
       "id": "821c",
       "content": "This is third test anecdote",
+      "votes": 0
+    },
+    {
+      "id": "626f",
+      "content": "Yet another test anecdote",
       "votes": 0
     }
   ]
