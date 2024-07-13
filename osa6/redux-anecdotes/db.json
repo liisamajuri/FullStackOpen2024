@@ -34,6 +34,11 @@
       "id": "b9ad",
       "content": "This is test anecdote",
       "votes": 0
+    },
+    {
+      "id": "a6e1",
+      "content": "This is another test anecdote",
+      "votes": 0
     }
   ]
 }
