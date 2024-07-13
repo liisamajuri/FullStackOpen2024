@@ -12,8 +12,10 @@ const store = configureStore({
   }
 })
 
+/*
 anecdoteService.getAll().then(notes =>
   store.dispatch(setAnecdote(notes))
 )
+*/
 
 export default store
