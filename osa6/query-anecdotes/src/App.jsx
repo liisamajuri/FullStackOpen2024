@@ -3,7 +3,6 @@ import Notification from './components/Notification'
 
 import { useQuery } from '@tanstack/react-query'
 import { getAnecdotes } from './requests'
-import axios from 'axios'
 
 const App = () => {
 
@@ -16,6 +15,7 @@ const App = () => {
     queryFn: getAnecdotes,
     retry: 1
   })
+  
   console.log(JSON.parse(JSON.stringify(result)))
 
   if ( result.isLoading ) {
