@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxpaXNhbWFqIiwiaWQiOiI2Njc4NjdhOTdiNjBjYjJlNGEwNWE0N2UiLCJpYXQiOjE3MTkxNjczMTd9.8Sz1hOkA8AmRrPvb7D3NPibai6oj5G85cf3obOgrmaI
+
+{
+  "content": "Testing to create new note after authentication by VSC REST client",
+  "important": true
+}
