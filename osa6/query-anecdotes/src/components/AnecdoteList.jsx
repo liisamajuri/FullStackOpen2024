@@ -1,14 +1,16 @@
-import PropTypes from 'prop-types';
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { updateAnecdote } from '../requests'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { getAnecdotes, updateAnecdote } from '../requests'
+import { useNotification } from '../NotificationContext'
 
-const AnecdoteList = ({ anecdotes }) => {
+const AnecdoteList = () => {
   const queryClient = useQueryClient()
+  const { setNotification } = useNotification()
 
   const updateAnecdoteMutation = useMutation({
     mutationFn: updateAnecdote,
-    onSuccess: () => {
-      queryClient.invalidateQueries('anecdotes')
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['anecdotes']})
+      setNotification(`Anecdote '${data.content}' voted`, 5)
     },
   })
 
@@ -18,6 +20,22 @@ const AnecdoteList = ({ anecdotes }) => {
       votes: anecdote.votes + 1
     })
   }
+
+  const result = useQuery({
+    queryKey: ['anecdotes'],
+    queryFn: getAnecdotes,
+    retry: 1
+  })
+
+  if (result.isLoading) {
+    return <div>loading data...</div>
+  }
+
+  if (result.isError) {
+    return <div>Anecdote service not available due to problems in server</div>
+  }
+
+  const anecdotes = result.data
 
   return (
     <div>
@@ -34,14 +52,6 @@ const AnecdoteList = ({ anecdotes }) => {
       )}
     </div>
   )
-}
-
-AnecdoteList.propTypes = {
-  anecdotes: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    votes: PropTypes.number.isRequired
-  })).isRequired,
 }
 
 export default AnecdoteList
