@@ -2,38 +2,41 @@
 import { createContext, useReducer, useContext } from 'react'
 import PropTypes from 'prop-types'
 
+const NotificationContext = createContext()
+
 const notificationReducer = (state, action) => {
   switch (action.type) {
-    case 'SET_NOTIFICATION':
+    case 'SET':
       return action.payload
-    case 'CLEAR_NOTIFICATION':
+    case 'CLEAR':
       return ''
     default:
       return state
   }
 }
 
-const NotificationContext = createContext()
-
-export const NotificationProvider = ({ children }) => {
-  const [notification, dispatch] = useReducer(notificationReducer, '')
-
-  const setNotification = (message, time) => {
-    dispatch({ type: 'SET_NOTIFICATION', payload: message })
-    setTimeout(() => {
-      dispatch({ type: 'CLEAR_NOTIFICATION' })
-    }, time * 1000)
-  }
+export const NotificationContextProvider = (props) => {
+  const [notification, notificationDispatch] = useReducer(notificationReducer, '')
 
   return (
-    <NotificationContext.Provider value={{ notification, setNotification }}>
-      {children}
+    <NotificationContext.Provider value={[notification, notificationDispatch]}>
+      {props.children}
     </NotificationContext.Provider>
   )
 }
 
-NotificationProvider.propTypes = {
+NotificationContextProvider.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-export const useNotification = () => useContext(NotificationContext)
+export const useNotificationValue = () => {
+  const context = useContext(NotificationContext)
+  return context[0]
+}
+
+export const useNotificationDispatch = () => {
+  const context = useContext(NotificationContext)
+  return context[1]
+}
+
+export default NotificationContext
