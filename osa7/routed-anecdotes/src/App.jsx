@@ -6,7 +6,7 @@ import {
   useMatch, useNavigate,
 } from 'react-router-dom'
 
-import  { useField } from './hooks'
+import { useField, useReset } from './hooks'
 
 const Menu = () => {
   const padding = {
@@ -75,6 +75,7 @@ const CreateNew = (props) => {
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
+  const reset = useReset([content, author, info])
 
 
   const handleSubmit = (e) => {
@@ -94,12 +95,6 @@ const CreateNew = (props) => {
   }
 
 
-  const handleReset = () => {
-    content.reset()
-    author.reset()
-    info.reset()
-  }  
-
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -117,7 +112,7 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button type="submit">create</button>
-        <button type="button" onClick={handleReset}>reset</button>
+        <button type="button" onClick={reset}>reset</button>
       </form>
     </div>
   )
