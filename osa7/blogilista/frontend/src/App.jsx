@@ -1,18 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import FilteredBlogs from './components/FilteredBlogs';
 import BlogAddForm from './components/BlogAddForm';
 import Togglable from './components/Togglable';
 import blogService from './services/blogs';
 import loginService from './services/login';
+import { setNotificationWithTimeout } from './reducers/notificationReducer';
+import Notification from './components/Notification';
+import './index.css';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [infoMessage, setInfoMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const blogFormRef = useRef();
+  const dispatch = useDispatch();
 
   const fetchBlogs = async () => {
     const blogs = await blogService.getAll();
@@ -39,37 +42,20 @@ const App = () => {
 
   console.log('render', blogs.length, 'blogs');
 
-  const Notification = ({ message, type }) => {
-    if (message === null) {
-      return null;
-    }
-
-    return <div className={type === 'error' ? 'error' : 'info'}>{message}</div>;
-  };
-
   const addBlog = async (blogObject, message) => {
     if (!blogObject) {
-      setErrorMessage(message);
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 2000);
+      dispatch(setNotificationWithTimeout(message, 'error', 3));
       return;
     }
 
     try {
       const returnedBlog = await blogService.create(blogObject);
       setBlogs(blogs.concat(returnedBlog));
-      setInfoMessage(message);
+      dispatch(setNotificationWithTimeout(message, 'info', 3));
       fetchBlogs();
-      setTimeout(() => {
-        setInfoMessage(null);
-      }, 2000);
       blogFormRef.current.toggleVisibility();
     } catch (exception) {
-      setErrorMessage('Error adding blog');
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 2000);
+      dispatch(setNotificationWithTimeout('Error adding blog', 'error', 3));
     }
   };
 
@@ -82,10 +68,7 @@ const App = () => {
       updatedBlogs.sort((a, b) => b.likes - a.likes);
       setBlogs(updatedBlogs);
     } catch (exception) {
-      setErrorMessage('Error updating likes');
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 2000);
+      dispatch(setNotificationWithTimeout('Error updating likes', 'error', 3));
     }
   };
 
@@ -94,10 +77,7 @@ const App = () => {
       await blogService.remove(id);
       setBlogs(blogs.filter((blog) => blog.id !== id));
     } catch (exception) {
-      setErrorMessage('Error deleting blog');
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 2000);
+      dispatch(setNotificationWithTimeout('Error deleting blog', 'error', 3));
     }
   };
 
@@ -117,27 +97,20 @@ const App = () => {
       setUser(user);
       setUsername('');
       setPassword('');
-      setInfoMessage(`${user.name} logged in!`);
-      setTimeout(() => {
-        setInfoMessage(null);
-      }, 2000);
+      dispatch(
+        setNotificationWithTimeout(`${user.name} logged in!`, 'info', 3),
+      );
     } catch (exception) {
       setUsername('');
       setPassword('');
-      setErrorMessage('Wrong credentials');
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 2000);
+      dispatch(setNotificationWithTimeout('Wrong credentials', 'error', 3));
     }
   };
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser');
     setUser(null);
-    setInfoMessage(`${user.name} logged out!`);
-    setTimeout(() => {
-      setInfoMessage(null);
-    }, 2000);
+    dispatch(setNotificationWithTimeout(`${user.name} logged out!`, 'info', 3));
   };
 
   const loginForm = () => (
@@ -184,8 +157,7 @@ const App = () => {
   return (
     <div>
       <h1>Blogs</h1>
-      <Notification message={infoMessage} type="info" />
-      <Notification message={errorMessage} type="error" />
+      <Notification />
 
       {!user && loginForm()}
       {user && (
