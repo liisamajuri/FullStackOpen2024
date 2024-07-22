@@ -1,31 +1,26 @@
 import { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FilteredBlogs from './components/FilteredBlogs';
 import BlogAddForm from './components/BlogAddForm';
 import Togglable from './components/Togglable';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import { setNotificationWithTimeout } from './reducers/notificationReducer';
+import { initializeBlogs, createBlog } from './reducers/blogReducer';
 import Notification from './components/Notification';
 import './index.css';
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const blogFormRef = useRef();
   const dispatch = useDispatch();
-
-  const fetchBlogs = async () => {
-    const blogs = await blogService.getAll();
-    blogs.sort((a, b) => b.likes - a.likes);
-    setBlogs(blogs);
-  };
+  const blogs = useSelector((state) => state.blogs);
 
   useEffect(() => {
-    fetchBlogs();
-  }, []);
+    dispatch(initializeBlogs());
+  }, [dispatch]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
@@ -36,12 +31,6 @@ const App = () => {
     }
   }, []);
 
-  if (!blogs) {
-    return null;
-  }
-
-  console.log('render', blogs.length, 'blogs');
-
   const addBlog = async (blogObject, message) => {
     if (!blogObject) {
       dispatch(setNotificationWithTimeout(message, 'error', 3));
@@ -49,10 +38,8 @@ const App = () => {
     }
 
     try {
-      const returnedBlog = await blogService.create(blogObject);
-      setBlogs(blogs.concat(returnedBlog));
+      await dispatch(createBlog(blogObject));
       dispatch(setNotificationWithTimeout(message, 'info', 3));
-      fetchBlogs();
       blogFormRef.current.toggleVisibility();
     } catch (exception) {
       dispatch(setNotificationWithTimeout('Error adding blog', 'error', 3));
@@ -62,11 +49,8 @@ const App = () => {
   const updateLikes = async (id, updatedBlog) => {
     try {
       const returnedBlog = await blogService.update(id, updatedBlog);
-      const updatedBlogs = blogs.map((blog) =>
-        blog.id === id ? returnedBlog : blog,
-      );
-      updatedBlogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(updatedBlogs);
+      dispatch(setNotificationWithTimeout('Likes updated!', 'info', 3));
+      dispatch(initializeBlogs());
     } catch (exception) {
       dispatch(setNotificationWithTimeout('Error updating likes', 'error', 3));
     }
@@ -75,7 +59,8 @@ const App = () => {
   const deleteBlog = async (id) => {
     try {
       await blogService.remove(id);
-      setBlogs(blogs.filter((blog) => blog.id !== id));
+      dispatch(setNotificationWithTimeout('Blog deleted', 'info', 3));
+      dispatch(initializeBlogs());
     } catch (exception) {
       dispatch(setNotificationWithTimeout('Error deleting blog', 'error', 3));
     }
@@ -90,9 +75,7 @@ const App = () => {
         username,
         password,
       });
-
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
-
       blogService.setToken(user.token);
       setUser(user);
       setUsername('');
