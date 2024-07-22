@@ -12,29 +12,25 @@ import {
   likeBlog,
   deleteBlog,
 } from './reducers/blogReducer';
+import { loginUser, logoutUser, initializeUser } from './reducers/userReducer';
 import Notification from './components/Notification';
 import './index.css';
 
 const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState(null);
   const blogFormRef = useRef();
   const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(initializeBlogs());
   }, [dispatch]);
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
-    }
-  }, []);
+    dispatch(initializeUser());
+  }, [dispatch]);
 
   const addBlog = async (blogObject, message) => {
     if (!blogObject) {
@@ -74,18 +70,10 @@ const App = () => {
     console.log('logging in with', username, password);
 
     try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(user);
+      await dispatch(loginUser({ username, password }));
       setUsername('');
       setPassword('');
-      dispatch(
-        setNotificationWithTimeout(`${user.name} logged in!`, 'info', 3),
-      );
+      dispatch(setNotificationWithTimeout(`${username} logged in!`, 'info', 3));
     } catch (exception) {
       setUsername('');
       setPassword('');
@@ -94,8 +82,7 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappUser');
-    setUser(null);
+    dispatch(logoutUser());
     dispatch(setNotificationWithTimeout(`${user.name} logged out!`, 'info', 3));
   };
 
