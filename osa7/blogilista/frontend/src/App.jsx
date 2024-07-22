@@ -6,7 +6,12 @@ import Togglable from './components/Togglable';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import { setNotificationWithTimeout } from './reducers/notificationReducer';
-import { initializeBlogs, createBlog } from './reducers/blogReducer';
+import {
+  initializeBlogs,
+  createBlog,
+  likeBlog,
+  deleteBlog,
+} from './reducers/blogReducer';
 import Notification from './components/Notification';
 import './index.css';
 
@@ -46,21 +51,19 @@ const App = () => {
     }
   };
 
-  const updateLikes = async (id, updatedBlog) => {
+  const updateLikes = (id, updatedBlog) => {
     try {
-      const returnedBlog = await blogService.update(id, updatedBlog);
+      dispatch(likeBlog(id, updatedBlog));
       dispatch(setNotificationWithTimeout('Likes updated!', 'info', 3));
-      dispatch(initializeBlogs());
     } catch (exception) {
       dispatch(setNotificationWithTimeout('Error updating likes', 'error', 3));
     }
   };
 
-  const deleteBlog = async (id) => {
+  const handleDeleteBlog = (id) => {
     try {
-      await blogService.remove(id);
+      dispatch(deleteBlog(id));
       dispatch(setNotificationWithTimeout('Blog deleted', 'info', 3));
-      dispatch(initializeBlogs());
     } catch (exception) {
       dispatch(setNotificationWithTimeout('Error deleting blog', 'error', 3));
     }
@@ -132,7 +135,7 @@ const App = () => {
         blogs={blogs}
         user={user}
         updateLikes={updateLikes}
-        deleteBlog={deleteBlog}
+        deleteBlog={handleDeleteBlog}
       />
     </div>
   );
