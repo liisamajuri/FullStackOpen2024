@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FilteredBlogs from './components/FilteredBlogs';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import BlogAddForm from './components/BlogAddForm';
 import Togglable from './components/Togglable';
-import blogService from './services/blogs';
-import loginService from './services/login';
+import UserList from './components/UserList';
 import { setNotificationWithTimeout } from './reducers/notificationReducer';
 import {
   initializeBlogs,
@@ -131,17 +131,21 @@ const App = () => {
     <div>
       <h1>Blogs</h1>
       <Notification />
-
-      {!user && loginForm()}
-      {user && (
+      {user ? (
         <div>
           <p>
             {user.name} ({user.username}) logged in
           </p>
           <button onClick={handleLogout}>Logout</button>
-          {blogForm()}
         </div>
+      ) : (
+        loginForm()
       )}
+
+      <Routes>
+        <Route path="/" element={user && <div>{blogForm()}</div>} />
+        <Route path="/users" element={user && <UserList />} />
+      </Routes>
     </div>
   );
 };
