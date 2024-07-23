@@ -6,6 +6,7 @@ import {
   Route,
   useNavigate,
   Navigate,
+  Link,
 } from 'react-router-dom';
 import './index.css';
 import FilteredBlogs from './components/FilteredBlogs';
@@ -124,6 +125,7 @@ const App = () => {
 
   const blogForm = () => (
     <div>
+      <h2>Blogs</h2>
       <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
         <BlogAddForm createBlog={addBlog} />
       </Togglable>
@@ -136,26 +138,53 @@ const App = () => {
     </div>
   );
 
+  const Navigation = () => {
+    return (
+      <nav>
+        <Link to="/">blogs</Link>
+        <Link to="/users">users</Link>
+        {user ? (
+          <>
+            <em>{user.name} logged in </em>
+            <button onClick={handleLogout}>logout</button>
+          </>
+        ) : (
+          <Link to="/login">login</Link>
+        )}
+      </nav>
+    );
+  };
+
   return (
     <div>
-      <h1>Blogs</h1>
       <Notification />
-      {user ? (
-        <div>
-          <p>
-            {user.name} ({user.username}) logged in
-          </p>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      ) : (
-        loginForm()
-      )}
-
+      <Navigation />
+      <br></br>
+      <h1>Blog App</h1>
+      <br></br>
       <Routes>
-        <Route path="/" element={user && <div>{blogForm()}</div>} />
-        <Route path="/users" element={user && <UserList />} />
-        <Route path="/users/:id" element={<User />} />
-        <Route path="/blogs/:id" element={<BlogView />} />
+        <Route
+          path="/"
+          element={
+            user ? <div>{blogForm()}</div> : <Navigate replace to="/login" />
+          }
+        />
+        <Route
+          path="/users"
+          element={user ? <UserList /> : <Navigate replace to="/login" />}
+        />
+        <Route
+          path="/users/:id"
+          element={user ? <User /> : <Navigate replace to="/login" />}
+        />
+        <Route
+          path="/blogs/:id"
+          element={user ? <BlogView /> : <Navigate replace to="/login" />}
+        />
+        <Route
+          path="/login"
+          element={!user ? loginForm() : <Navigate replace to="/" />}
+        />
       </Routes>
     </div>
   );

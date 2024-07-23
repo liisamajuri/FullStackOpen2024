@@ -1,22 +1,26 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { likeBlog } from '../reducers/blogReducer';
-import { setNotificationWithTimeout } from '../reducers/notificationReducer';
 
 const BlogView = () => {
   const { id } = useParams();
+  const blogs = useSelector((state) => state.blogs);
+  const blog = blogs.find((b) => b.id === id);
   const dispatch = useDispatch();
-  const blog = useSelector((state) =>
-    state.blogs.find((blog) => blog.id === id),
-  );
 
   if (!blog) {
     return <div>Loading...</div>;
   }
 
   const handleLike = () => {
-    dispatch(likeBlog(blog.id, { ...blog, likes: blog.likes + 1 }));
-    dispatch(setNotificationWithTimeout('Blog liked!', 'info', 3));
+    const updatedBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id,
+    };
+    dispatch(likeBlog(id, updatedBlog));
   };
 
   return (

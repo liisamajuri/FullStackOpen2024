@@ -39,11 +39,12 @@ const update = async (id, updatedObject) => {
     headers: { Authorization: token },
   };
 
-  console.log(updatedObject);
+  console.log(`Updating: ${updatedObject.title}`);
+  console.log(`${baseUrl}/${id}`);
 
   try {
     const response = await axios.put(`${baseUrl}/${id}`, updatedObject, config);
-    console.log(response.data);
+    console.log(`Response: ${response.data}`);
     return response.data;
   } catch (error) {
     console.error('Error updating blog:', error);

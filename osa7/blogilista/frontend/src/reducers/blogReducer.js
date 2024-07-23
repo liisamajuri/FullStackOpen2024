@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import blogService from '../services/blogs';
+import { setNotificationWithTimeout } from './notificationReducer';
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -14,7 +15,7 @@ const blogSlice = createSlice({
     updateBlog(state, action) {
       const updatedBlog = action.payload;
       return state.map((blog) =>
-        blog.id === updatedBlog.id ? updatedBlog : blog,
+        blog.id !== updatedBlog.id ? blog : updatedBlog,
       );
     },
     removeBlog(state, action) {
@@ -42,11 +43,16 @@ export const createBlog = (blogObject) => {
   };
 };
 
-export const likeBlog = (id, blogObject) => {
+export const likeBlog = (id, updatedBlog) => {
   return async (dispatch) => {
-    const updatedBlog = await blogService.update(id, blogObject);
-    dispatch(updateBlog(updatedBlog));
-    dispatch(initializeBlogs());
+    try {
+      const returnedBlog = await blogService.update(id, updatedBlog);
+      dispatch(updateBlog(returnedBlog));
+      dispatch(setNotificationWithTimeout('Blog liked!', 'info', 3));
+    } catch (error) {
+      console.error('Error updating blog:', error);
+      dispatch(setNotificationWithTimeout('Error updating blog', 'error', 3));
+    }
   };
 };
 
