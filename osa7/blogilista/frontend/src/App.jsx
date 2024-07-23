@@ -1,10 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+  Navigate,
+} from 'react-router-dom';
+import './index.css';
 import FilteredBlogs from './components/FilteredBlogs';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import BlogAddForm from './components/BlogAddForm';
 import Togglable from './components/Togglable';
 import UserList from './components/UserList';
+import User from './components/User';
+import Notification from './components/Notification';
 import { setNotificationWithTimeout } from './reducers/notificationReducer';
 import {
   initializeBlogs,
@@ -13,8 +22,7 @@ import {
   deleteBlog,
 } from './reducers/blogReducer';
 import { loginUser, logoutUser, initializeUser } from './reducers/userReducer';
-import Notification from './components/Notification';
-import './index.css';
+import { initializeUsers } from './reducers/usersReducer';
 
 const App = () => {
   const [username, setUsername] = useState('');
@@ -23,12 +31,11 @@ const App = () => {
   const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs);
   const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(initializeBlogs());
-  }, [dispatch]);
-
-  useEffect(() => {
+    dispatch(initializeUsers());
     dispatch(initializeUser());
   }, [dispatch]);
 
@@ -84,6 +91,7 @@ const App = () => {
   const handleLogout = () => {
     dispatch(logoutUser());
     dispatch(setNotificationWithTimeout(`${user.name} logged out!`, 'info', 3));
+    navigate('/');
   };
 
   const loginForm = () => (
@@ -145,6 +153,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={user && <div>{blogForm()}</div>} />
         <Route path="/users" element={user && <UserList />} />
+        <Route path="/users/:id" element={<User />} />
       </Routes>
     </div>
   );
