@@ -14,6 +14,7 @@ import Togglable from './components/Togglable';
 import UserList from './components/UserList';
 import User from './components/User';
 import Notification from './components/Notification';
+import BlogView from './components/BlogView';
 import { setNotificationWithTimeout } from './reducers/notificationReducer';
 import {
   initializeBlogs,
@@ -154,6 +155,7 @@ const App = () => {
         <Route path="/" element={user && <div>{blogForm()}</div>} />
         <Route path="/users" element={user && <UserList />} />
         <Route path="/users/:id" element={<User />} />
+        <Route path="/blogs/:id" element={<BlogView />} />
       </Routes>
     </div>
   );
