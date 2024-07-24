@@ -1,11 +1,14 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { likeBlog } from '../reducers/blogReducer';
+import { likeBlog, addComment } from '../reducers/blogReducer';
+import { setNotificationWithTimeout } from '../reducers/notificationReducer';
 
 const BlogView = () => {
   const { id } = useParams();
   const blogs = useSelector((state) => state.blogs);
   const blog = blogs.find((b) => b.id === id);
+  const [comment, setComment] = useState('');
   const dispatch = useDispatch();
 
   if (!blog) {
@@ -23,6 +26,17 @@ const BlogView = () => {
     dispatch(likeBlog(id, updatedBlog));
   };
 
+  const handleCommentChange = (event) => {
+    setComment(event.target.value);
+  };
+
+  const handleAddComment = (event) => {
+    event.preventDefault();
+    dispatch(addComment(blog.id, comment));
+    dispatch(setNotificationWithTimeout('Comment added!', 'info', 3));
+    setComment('');
+  };
+
   return (
     <div>
       <h2>
@@ -34,12 +48,14 @@ const BlogView = () => {
       </div>
       <div>added by {blog.user.name}</div>
       <h3>Comments:</h3>
+      <form onSubmit={handleAddComment}>
+        <input type="text" value={comment} onChange={handleCommentChange} />
+        <button type="submit">add comment</button>
+      </form>
       <ul>
-        {blog.comments && blog.comments.length > 0 ? (
-          blog.comments.map((comment, index) => <li key={index}>{comment}</li>)
-        ) : (
-          <div>No comments yet</div>
-        )}
+        {blog.comments.map((comment, index) => (
+          <li key={index}>{comment}</li>
+        ))}
       </ul>
     </div>
   );
