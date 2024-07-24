@@ -8,6 +8,7 @@ import {
   Navigate,
   Link,
 } from 'react-router-dom';
+import { Form, Button, Navbar, Nav } from 'react-bootstrap';
 import './index.css';
 import FilteredBlogs from './components/FilteredBlogs';
 import BlogAddForm from './components/BlogAddForm';
@@ -29,6 +30,7 @@ import { initializeUsers } from './reducers/usersReducer';
 const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [clearFields, setClearFields] = useState(false);
   const blogFormRef = useRef();
   const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs);
@@ -51,6 +53,7 @@ const App = () => {
       await dispatch(createBlog(blogObject));
       dispatch(setNotificationWithTimeout(message, 'info', 3));
       blogFormRef.current.toggleVisibility();
+      setClearFields(true);
     } catch (exception) {
       dispatch(setNotificationWithTimeout('Error adding blog', 'error', 3));
     }
@@ -97,37 +100,39 @@ const App = () => {
   };
 
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
+    <Form onSubmit={handleLogin}>
       <h2>Log in to application</h2>
-      <div>
-        Username:
-        <input
+      <Form.Group>
+        <Form.Label>Username</Form.Label>
+        <Form.Control
           data-testid="username"
           type="text"
           value={username}
           name="Username"
           onChange={({ target }) => setUsername(target.value)}
         />
-      </div>
-      <div>
-        Password:
-        <input
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>Password</Form.Label>
+        <Form.Control
           data-testid="password"
           type="password"
           value={password}
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
         />
-      </div>
-      <button type="submit">Login</button>
-    </form>
+      </Form.Group>
+      <Button variant="primary" type="submit" className="mt-3">
+        Login
+      </Button>
+    </Form>
   );
 
   const blogForm = () => (
     <div>
       <h2>Blogs</h2>
       <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
-        <BlogAddForm createBlog={addBlog} />
+        <BlogAddForm createBlog={addBlog} clearFields={clearFields} />
       </Togglable>
       <FilteredBlogs
         blogs={blogs}
@@ -138,25 +143,46 @@ const App = () => {
     </div>
   );
 
+  const padding = {
+    paddingRight: 5,
+  };
+
   const Navigation = () => {
     return (
-      <nav>
-        <Link to="/">blogs</Link>
-        <Link to="/users">users</Link>
-        {user ? (
-          <>
-            <em>{user.name} logged in </em>
-            <button onClick={handleLogout}>logout</button>
-          </>
-        ) : (
-          <Link to="/login">login</Link>
-        )}
-      </nav>
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="#" as="span">
+              <Link style={padding} to="/">
+                blogs
+              </Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <Link style={padding} to="/users">
+                users
+              </Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              {user ? (
+                <>
+                  <em>{user.name} logged in </em>
+                  <button onClick={handleLogout}>logout</button>
+                </>
+              ) : (
+                <Link style={padding} to="/login">
+                  login
+                </Link>
+              )}
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
     );
   };
 
   return (
-    <div>
+    <div className="container">
       <Notification />
       <Navigation />
       <br></br>

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { likeBlog, addComment } from '../reducers/blogReducer';
 import { setNotificationWithTimeout } from '../reducers/notificationReducer';
+import { Button, Form, ListGroup } from 'react-bootstrap';
 
 const BlogView = () => {
   const { id } = useParams();
@@ -44,19 +45,33 @@ const BlogView = () => {
       </h2>
       <a href={blog.url}>{blog.url}</a>
       <div>
-        {blog.likes} likes <button onClick={handleLike}>like</button>
+        {blog.likes} likes{' '}
+        <Button onClick={handleLike} variant="primary" className="ml-2">
+          Like
+        </Button>
       </div>
       <div>added by {blog.user.name}</div>
+      <br />
       <h3>Comments:</h3>
-      <form onSubmit={handleAddComment}>
-        <input type="text" value={comment} onChange={handleCommentChange} />
-        <button type="submit">add comment</button>
-      </form>
-      <ul>
+      <Form onSubmit={handleAddComment}>
+        <Form.Group controlId="commentForm">
+          <Form.Label>Comment</Form.Label>
+          <Form.Control
+            type="text"
+            value={comment}
+            onChange={handleCommentChange}
+            placeholder="Write a comment"
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Add comment
+        </Button>
+      </Form>
+      <ListGroup className="mt-3">
         {blog.comments.map((comment, index) => (
-          <li key={index}>{comment}</li>
+          <ListGroup.Item key={index}>{comment}</ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   );
 };
