@@ -11,26 +11,20 @@ Kurssin laajuus on 5-14 opintopistettä, sisältö on sama kun Helsingin yliopis
 
 Henkilökohtaiset muistiinpanot kurssilta löytyy CodiMD:n dokumentista [Full Stack open -kurssin oppimismuistiinpanot - PART 1 (Liisa Majuri)](https://gitlab.dclabra.fi/wiki/ExPwnLaxSeeNa7SLuVa6MQ#Full-Stack-open--kurssin-oppimismuistiinpanot---PART-1-Liisa-Majuri).
 
-## Osan 3 README: Tehtävät 3.9.-3.11
 
-- Aiempiin tehtäviin verrattuna tehtävänantojen 3.9.-3.11. mukaiset taskit on tehty *samoihin tiedostoihin*
-- Poikkeuksena aiempiin tehtäviin em. tehtävien hakemistot on nimetty seuraavasti:
-  - _**backend_puhelinluettelo**_
-  - _**frontend_puhelinluettelo**_
-
-- Linkki Renderissä toimivaan sovellukseen: [https://fullstackopen2024-puhelinluettelo.onrender.com/](https://fullstackopen2024-puhelinluettelo.onrender.com/))
-
-
-## Huomioita tehtävistä
+## Yleisiä huomioita tehtävistä
 
 
 ### db.json-tiedostot
 
-Tehtävissä, joissa on käytetty JSON Serveriä ja *db.json*-tiedostoa, em. tiedosto on siirretty tehtävän valmistumisen jälkeen ko. harjoitustehtävän hakemistoon. Tehtävän koodin suorittamiseksi *db.json*-tiedosto tulee siirtää projektin juurikansioon (tai korvata sillä hetkellä juurikansiossa oleva samanniminen tiedosto).
+Alkupuolen tehtävissä, joissa on käytetty JSON Serveriä ja *db.json*-tiedostoa, em. tiedosto on siirretty tehtävän valmistumisen jälkeen ko. harjoitustehtävän hakemistoon. Tehtävän koodin suorittamiseksi *db.json*-tiedosto tulee siirtää projektin juurikansioon (tai korvata sillä hetkellä juurikansiossa oleva samanniminen tiedosto).
 
 
-### Osa 3: Tehtävät 3.9.-3.11.
+### ESLint
 
-Tehtävänantojen 3.9.-3.11. toteutus löytyy *osa3*-kansion alihakemistoista _**backend_puhelinluettelo**_ ja _**frontend_puhelinluettelo**_ *(huomaa poikkeuksellinen nimeämistapa!)*.
+ESLint on päivittänyt konfiguraatiomuotojaan, ja tehtävissä, joissa ESLintin käyttö on ollut osa tehtävänantoa, on käytetty uutta tapaa määrittää konfiguraatiot. Komennolla `npx eslint --init` automaattisesti muodostunutta oletustiedostoa *eslint.config.mjs* on muokattu siten, että se vastaa sisällöltään *notes*-harjoituksessa esiteltyä ESLint-konfiguraatiota/-sääntöjä.
 
-Linkki Renderissä toimivaan sovellukseen: [https://fullstackopen2024-puhelinluettelo.onrender.com/](https://fullstackopen2024-puhelinluettelo.onrender.com/)
+
+### Tehtävien nimeäminen
+
+Osioissa 0-2 kukin yksittäinen tehtävä on tehty omaan hakemistoonsa. Osiosta 3 eteenpäin samaa tehtäväkokonaisuutta koskevat tehtävät on tehty "jatkokehittäen" samoihin tiedostoihin. Tarkemmat tiedot osioiden 3-7 tehtävistä löytyy kunkin osion README:stä
